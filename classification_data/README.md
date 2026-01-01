@@ -69,3 +69,47 @@
 下圖顯示了資料集中所有**摘要**的字元長度分佈狀況。
 
 ![摘要長度分佈](img/eda_abstract_length_complete_dataset.png)
+
+## Sample
+```
+title,abstract,label
+Haemophilus influenzae meningitis with prolonged hospital course.,"A retrospective evaluation of Haemophilus influenzae type b meningitis observed over a 2-year period documented 86 cases.
+ Eight of these patients demonstrated an unusual clinical course characterized by persistent fever (duration: greater than 10 days), cerebrospinal fluid pleocytosis, profound meningeal enhancement on computed tomography, significant morbidity, and a prolonged hospital course.
+ The mean age of these 8 patients was 6 months, in contrast to a mean age of 14 months for the entire group.
+ Two patients had clinical evidence of relapse.
+ Four of the 8 patients tested for latex particle agglutination in the cerebrospinal fluid remained positive after 10 days.
+ All patients received antimicrobial therapy until they were afebrile for a minimum of 5 days.
+ Subsequent neurologic examination revealed a persistent seizure disorder in 5 patients (62.5%), moderate-to-profound hearing loss in 2 (25%), mild ataxia in 1 (12.5%), and developmental delay with hydrocephalus which required shunting in 1 (12.5%).
+ One patient had no sequelae.",C01
+```
+```
+Sample Record 1:
+title       Haemophilus influenzae meningitis with prolong...
+abstract    A retrospective evaluation of Haemophilus infl...
+label                                                     C01
+Name: 0, dtype: object
+
+Sample Record 2:
+title          Augmentation mentoplasty using Mersilene mesh.
+abstract    Many different materials are available for aug...
+label                                                     C01
+Name: 1, dtype: object
+
+Sample Record 3:
+title       Multiple intracranial mucoceles associated wit...
+abstract    The purpose of this article is to alert clinic...
+label                                                     C01
+Name: 2, dtype: object
+
+Sample Record 4:
+title       Replacement of an aortic valve cusp after neon...
+abstract    Septic arthritis developed in a neonate after ...
+label                                                     C01
+Name: 3, dtype: object
+
+Sample Record 5:
+title       Mucosal intussusception to avoid ascending cho...
+abstract    Many methods have been devised to prevent asce...
+label                                                     C01
+Name: 4, dtype: object
+```
