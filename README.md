@@ -19,7 +19,7 @@ Ohsumed_classification/
 |-- MeSH_data/                          MeSH data 相關整理與EDA
 |   |-- README.md  
 | 
-|-- Model/                          模型訓練 CoLab 檔案
+|-- Model/                              模型訓練 CoLab 檔案
 |   |-- README.md  
 | 
 |-- 待續
