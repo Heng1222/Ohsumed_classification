@@ -1,6 +1,6 @@
 # Ohsumed 資料集分類說明
 
-這個資料夾主要進行 Ohsumed 醫療文獻資料集建立與基本 EDA 分析。專案包含兩個主要腳本：
+這個資料夾主要進行 Ohsumed 醫療文獻資料集建立與基本 EDA 分析。共包含兩個主要腳本：
 1.  `create_dataset.py`: 用於從原始的資料夾結構中建立一個完整的 CSV 資料集。
 2.  `readfile.py`: 用於讀取已生成的 CSV 檔案，並對其進行探索性資料分析 (EDA)。
 
@@ -50,7 +50,7 @@
 
 ## 探索性資料分析 (EDA)
 - Total number of `ohsumed_dataset.csv` records: 56984
-`readfile.py` 腳本會讀取 `ohsumed_dataset.csv` 並針對 `label`, `title`, 和 `abstract` 三個欄位進行獨立分析，生成以下關於資料集分佈的圖表。
+-`readfile.py` 腳本會讀取 `ohsumed_dataset.csv` 並針對 `label`, `title`, 和 `abstract` 三個欄位進行獨立分析，生成以下關於資料集分佈的圖表。
 
 ### 標籤分佈 (Label Distribution)
 
