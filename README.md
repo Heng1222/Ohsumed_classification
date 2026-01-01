@@ -1,6 +1,8 @@
 # Ohsumed_classification
 - Ohsumed data classification task
-- 
+- Data source: 
+    - [Ohsumed](https://opendatalab.com/OpenDataLab/Ohsumed)
+    - [MeSH](https://www.ncbi.nlm.nih.gov/mesh/)
 ## Contributors 👥
 * **[Heng1222](https://github.com/Heng1222)** 
 * **[aaallyssaaa](https://github.com/aaallyssaaa)** 
