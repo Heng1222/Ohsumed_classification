@@ -50,7 +50,7 @@
 
 ## 探索性資料分析 (EDA)
 - Total number of `ohsumed_dataset.csv` records: 56984
--`readfile.py` 腳本會讀取 `ohsumed_dataset.csv` 並針對 `label`, `title`, 和 `abstract` 三個欄位進行獨立分析，生成以下關於資料集分佈的圖表。
+- `readfile.py` 腳本會讀取 `ohsumed_dataset.csv` 並針對 `label`, `title`, 和 `abstract` 三個欄位進行獨立分析，生成以下關於資料集分佈的圖表。
 
 ### 標籤分佈 (Label Distribution)
 
