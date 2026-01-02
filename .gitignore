@@ -1,0 +1,102 @@
+# ========================
+/MeSH_data/mesh2025.nt
+/MeSH_data/mesh2025.nt.gz
+# ========================  
+# =========================
+# 作業系統 / 編輯器
+# =========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# =========================
+# Python 基本
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+pip-wheel-metadata/
+
+# =========================
+# 虛擬環境
+# =========================
+venv/
+.env/
+.env.*
+.venv/
+conda/
+miniconda/
+anaconda/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# =========================
+# 訓練產生的模型檔案
+# =========================
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.onnx
+*.pb
+*.joblib
+*.pkl
+
+# =========================
+# 訓練輸出 / log
+# =========================
+logs/
+log/
+runs/
+tensorboard/
+tb_logs/
+wandb/
+mlruns/
+lightning_logs/
+
+# =========================
+# 快取 / 暫存
+# =========================
+.cache/
+tmp/
+temp/
+
+# =========================
+# 設定檔（含金鑰）
+# =========================
+config.local.yaml
+config.local.json
+secrets.yaml
+secrets.json
+.env.local
+
+# =========================
+# 評估結果 / 預測輸出
+# =========================
+predictions/
+outputs/
+results/
+evaluation/
+
+# =========================
+# 壓縮檔
+# =========================
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.gz
