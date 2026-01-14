@@ -4,9 +4,9 @@ import shutil
 import os
 
 def download_mesh():
-    url = "https://nlmpubs.nlm.nih.gov/projects/mesh/rdf/2025/mesh2025.nt.gz"
-    local_gz = "mesh2025.nt.gz"
-    local_nt = "mesh2025.nt"
+    url = "https://nlmpubs.nlm.nih.gov/projects/mesh/rdf/2026/mesh2026.nt.gz"
+    local_gz = "nt_data/mesh2026.nt.gz"
+    local_nt = "nt_data/mesh2026.nt"
 
     if not os.path.exists(local_nt):
         print(f"正在下載 {url}...")
