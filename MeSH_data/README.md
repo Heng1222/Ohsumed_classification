@@ -344,3 +344,9 @@ Neoplasm,Tumor,1.0
 0               Spastic                              Niemann-Pick Diseases            0.13
 1  Peritoneal Neoplasms
 ```
+## 探索性資料分析 (EDA)
+### 相似度分佈 (Label Distribution)
+下圖顯示了資料集中相似度分佈。
+此圖僅以descriptor主要label為隨機挑選節點目標，總樣本數200000
+
+![相似度分佈](img/mesh_descriptor_only_200000.png)
