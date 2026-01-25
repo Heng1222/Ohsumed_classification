@@ -7,7 +7,7 @@ from collections import defaultdict
 # --- 配置 ---
 LOCAL_NT_FILE = "nt_data/mesh2026.nt.gz"
 OUTPUT_CSV_FILE = "mesh_dataset.csv"
-SAMPLING_QUANTITY = 5000 # 預設取樣數量，可由使用者更改
+SAMPLING_QUANTITY = 200000 # 預設取樣數量，可由使用者更改
 
 # MeSH 命名空間
 MESH = rdflib.Namespace("http://id.nlm.nih.gov/mesh/")
@@ -84,25 +84,32 @@ def extract_data_from_graph(g):
         print("警告: 找不到任何與 tree number 連結的 descriptor。術語提取可能為空。")
 
     processed_descriptors_count = 0
+    # for desc_uri in all_descriptors_with_tn:
+    #     # 路徑: Descriptor -> Concept -> Term -> Label
+    #     # 1. Descriptor -> Concept
+    #     for concept_uri in g.objects(desc_uri, MESH_VOCAB.concept):
+    #         # 2. Concept -> Term (使用 'term' 和 'preferredTerm')
+    #         term_uris = set(g.objects(concept_uri, MESH_VOCAB.term))
+    #         term_uris.update(g.objects(concept_uri, MESH_VOCAB.preferredTerm))
+
+    #         for term_uri in term_uris:
+    #             # 3. Term -> Label (使用 rdfs:label 和 vocab:prefLabel)，並移除雙引號
+    #             for label in g.objects(term_uri, RDFS.label):
+    #                 descriptor_to_terms[desc_uri].add(str(label).strip('"'))
+    #             for label in g.objects(term_uri, MESH_VOCAB.prefLabel):
+    #                 descriptor_to_terms[desc_uri].add(str(label).strip('"'))
+
+    #     processed_descriptors_count += 1
+    #     if processed_descriptors_count % 5000 == 0:
+    #         print(f"  已處理 {processed_descriptors_count}/{len(all_descriptors_with_tn)} 個 descriptors 的術語提取...")
+    
+    
+    # --- 修改部分開始 ---
+    # 註解掉原本複雜的 Concept -> Term 路徑，改用簡單的 rdfs:label
     for desc_uri in all_descriptors_with_tn:
-        # 路徑: Descriptor -> Concept -> Term -> Label
-        # 1. Descriptor -> Concept
-        for concept_uri in g.objects(desc_uri, MESH_VOCAB.concept):
-            # 2. Concept -> Term (使用 'term' 和 'preferredTerm')
-            term_uris = set(g.objects(concept_uri, MESH_VOCAB.term))
-            term_uris.update(g.objects(concept_uri, MESH_VOCAB.preferredTerm))
-
-            for term_uri in term_uris:
-                # 3. Term -> Label (使用 rdfs:label 和 vocab:prefLabel)，並移除雙引號
-                for label in g.objects(term_uri, RDFS.label):
-                    descriptor_to_terms[desc_uri].add(str(label).strip('"'))
-                for label in g.objects(term_uri, MESH_VOCAB.prefLabel):
-                    descriptor_to_terms[desc_uri].add(str(label).strip('"'))
-
-        processed_descriptors_count += 1
-        if processed_descriptors_count % 5000 == 0:
-            print(f"  已處理 {processed_descriptors_count}/{len(all_descriptors_with_tn)} 個 descriptors 的術語提取...")
-
+        for label in g.objects(desc_uri, RDFS.label):
+            descriptor_to_terms[desc_uri].add(preprocess_term(str(label)))
+    # --- 修改部分結束 ---
     print(f"完成 descriptors 的處理。")
     print(f"找到 {len(descriptor_to_terms)} 個具有關聯術語的 Descriptors。")
     # 印出一些範例
@@ -329,6 +336,20 @@ def wup_similarity(tn1, tn2, log_example=False):
 
     return similarity
 
+def preprocess_term(term):
+    if not term:
+        return ""
+    # 處理逗號反轉邏輯
+    term = term.strip('"')
+    if ',' in term:
+        parts = [p.strip() for p in term.split(',')]
+        # 只有在逗號分隔為兩部分時才反轉，或是你可以根據需求調整
+        # 例如："Hearing Loss, Sudden" -> ["Hearing Loss", "Sudden"] -> "Sudden Hearing Loss"
+        term = " ".join(reversed(parts))
+
+    # 轉小寫並去除多餘空白
+    return term.lower().strip()
+
 def main():
     # --- 第 1 部分: 資料處理與樹狀結構 ---
     g = parse_mesh_rdf(LOCAL_NT_FILE)
@@ -420,7 +441,7 @@ def main():
         sampled_pairs_data.append({"word_i": term_i, "word_j": term_j, "wup_similarity": rounded_similarity})
         seen_term_pairs.add(current_term_pair)
         
-        if (len(sampled_pairs_data) % 100 == 0) and not log_this_sample:
+        if (len(sampled_pairs_data) % 100000 == 0) and not log_this_sample:
             print(f"  已產生 {len(sampled_pairs_data)}/{SAMPLING_QUANTITY} 個樣本...")
 
     print("取樣完成。")
