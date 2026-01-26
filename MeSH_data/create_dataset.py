@@ -186,7 +186,7 @@ def build_disease_tree(tree_number_to_all_terms, tree_number_to_descriptor_uri_m
         if node.descriptor_uri:
             # 嘗試從 descriptor 的 rdfs:label 取得術語
             for label in g.objects(node.descriptor_uri, RDFS.label):
-                node.terms.add(str(label).strip('"'))
+                node.terms.add(preprocess_term(str(label)))
                 descriptors_labels_added += 1
                 break # We only need one
     if descriptors_labels_added > 0:
