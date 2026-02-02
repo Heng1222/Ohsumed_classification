@@ -15,6 +15,11 @@
 - [x] RoBERTa basic model 直接做下游分類任務
 - [x] RoBERTa basic model + Training Data 做MLM學習後再做下游分類任務
 - [x] RoBERTa basic model + LoRA(Mesh) 後再做下游分類任務
+- [ ] 模型儲存 HG
+- [ ] 訓練時都加上時間計算，方便評估效率
+- [ ] Classifer 深一點 榨乾空間資訊
+- [ ] 專有名詞(MeSH) tokenize 後的 token 長度分布
+- [ ] 3種模型分類結果投到UMAP 加上 label 做 cluster 比純度
 
 ## 0202 result (MLM、LoRA)
 ### LoRA with 100000 data
