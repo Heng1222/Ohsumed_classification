@@ -1,29 +1,21 @@
 # Model
 - 這個資料夾用來存放實際訓練的 CoLab 檔案
-- 比較三種不同模式下的模型下游分類任務表現(basic/with MLM/LoRA with MeSH)
+1. 比較三種不同模式下的模型下游分類任務表現(basic/with MLM/LoRA with MeSH)
+2. 專有名詞(MeSH) tokenize 後的 token 長度分布
 
-## Training/Testing data config
+## 1. Downstream task - ohsumed classification
+### Training/Testing data config
 - 資料筆數、切割方法、seedNum、filter 等前處理設定
 - 3種比較方法的分類器皆須使用相同資料集
 - MLM Training/classifier Training/classifier testing
 
-## NN classifier
+### NN classifier
 - 模型頂層的分類器，訓練參數和方法都要相同
 - 23種下游分類類別
 
-## TODO
-- [x] RoBERTa basic model 直接做下游分類任務
-- [x] RoBERTa basic model + Training Data 做MLM學習後再做下游分類任務
-- [x] RoBERTa basic model + LoRA(Mesh) 後再做下游分類任務
-- [ ] 模型儲存 HG
-- [ ] 訓練時都加上時間計算，方便評估效率
-- [ ] Classifer 深一點 榨乾空間資訊
-- [ ] 專有名詞(MeSH) tokenize 後的 token 長度分布
-- [ ] 3種模型分類結果投到UMAP 加上 label 做 cluster 比純度
-
-## 0202 result (MLM、LoRA)
-### LoRA with 100000 data
-![訓練過程](LoRA_loss.png)
+### 0202 result (MLM、LoRA)
+#### LoRA with 100000 data
+![訓練過程](img/LoRA_loss.png)
 ```
 --- Final Evaluation Report ---
               precision    recall  f1-score   support
@@ -56,8 +48,8 @@
    macro avg       0.36      0.38      0.36       983
 weighted avg       0.36      0.38      0.36       983
 ```
-### LoRA with 200000 data
-![訓練過程](LoRA_loss_200000.png)
+#### LoRA with 200000 data
+![訓練過程](img/LoRA_loss_200000.png)
 ```
 --- Final Evaluation Report ---
               precision    recall  f1-score   support
@@ -90,8 +82,8 @@ weighted avg       0.36      0.38      0.36       983
    macro avg       0.35      0.37      0.35       983
 weighted avg       0.35      0.37      0.35       983
 ```
-### MLM
-![訓練過程](MLM_loss.png)
+#### MLM
+![訓練過程](img/MLM_loss.png)
 ```
 --- Final Evaluation Report ---
               precision    recall  f1-score   support
@@ -124,3 +116,6 @@ weighted avg       0.35      0.37      0.35       983
    macro avg       0.35      0.36      0.34       983
 weighted avg       0.35      0.36      0.34       983
 ```
+
+## 2. 專有名詞(MeSH) tokenize 後的 token 長度分布\
+## 3. UMAP 查看下游任務投影表現
