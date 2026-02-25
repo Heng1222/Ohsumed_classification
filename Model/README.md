@@ -13,7 +13,23 @@
 ### NN classifier
 - 模型頂層的分類器，訓練參數和方法都要相同
 - 23種下游分類類別
-
+```
+self.classifier = nn.Sequential(
+            nn.Linear(768, 1024),
+            nn.LayerNorm(1024),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(1024, 512),
+            nn.LayerNorm(512),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(512, 256),
+            nn.LayerNorm(256),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(256, num_labels)
+        )
+```
 ### Result (base、LoRA、MLM)
 #### base
 ![訓練過程](img/based_loss.png)
