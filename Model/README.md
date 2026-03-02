@@ -139,6 +139,5 @@ weighted avg       0.43      0.44      0.42       983
    macro avg       0.39      0.39      0.38       983
 weighted avg       0.39      0.39      0.38       983
 ```
-
 ## 2. 專有名詞(MeSH) tokenize 後的 token 長度分布
 ## 3. UMAP 查看下游任務投影表現
