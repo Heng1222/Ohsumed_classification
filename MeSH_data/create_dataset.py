@@ -336,6 +336,34 @@ def wup_similarity(tn1, tn2, log_example=False):
 
     return similarity
 
+def max_wup_similarity_for_terms(term_i, term_j, term_to_tree_numbers, log_example=False):
+    """計算兩個詞在所有對應 tree number pair 上的最大 Wu-Palmer 相似度。"""
+    tree_numbers_i = term_to_tree_numbers.get(term_i, [])
+    tree_numbers_j = term_to_tree_numbers.get(term_j, [])
+
+    if not tree_numbers_i or not tree_numbers_j:
+        return 0.0, (None, None), 0
+
+    best_similarity = -1.0
+    best_pair = (None, None)
+    pair_count = 0
+
+    for tn_i in tree_numbers_i:
+        for tn_j in tree_numbers_j:
+            pair_count += 1
+            similarity = wup_similarity(tn_i, tn_j, log_example=False)
+            if similarity > best_similarity:
+                best_similarity = similarity
+                best_pair = (tn_i, tn_j)
+
+    if log_example and best_pair[0] is not None and best_pair[1] is not None:
+        print(f"    - '{term_i}' 對應節點: {list(tree_numbers_i)}")
+        print(f"    - '{term_j}' 對應節點: {list(tree_numbers_j)}")
+        print(f"    - 共比較 {pair_count} 個節點配對，取最大值。")
+        wup_similarity(best_pair[0], best_pair[1], log_example=True)
+
+    return best_similarity, best_pair, pair_count
+
 def preprocess_term(term):
     if not term:
         return ""
@@ -393,10 +421,24 @@ def main():
     # --- 第 2 部分: 取樣與相似度計算 ---
     print(f"\n--- 步驟 5: 為 CSV 檔案產生 {SAMPLING_QUANTITY} 個樣本 ---")
     
-    valid_sampling_nodes = [node for node in all_disease_nodes.values() if node.terms and len(node.terms) > 0]
-    print(f"找到 {len(valid_sampling_nodes)} 個可用於取樣的節點。")
-    if len(valid_sampling_nodes) < 2:
-        print("沒有足夠的節點來進行取樣。正在結束程式。")
+    term_to_tree_numbers = defaultdict(set)
+    for node in all_disease_nodes.values():
+        if not node.terms:
+            continue
+        for term in node.terms:
+            term_to_tree_numbers[term].add(node.tree_number)
+
+    # 轉為排序後的 tuple，讓 tie-breaking 與輸出更穩定
+    term_to_tree_numbers = {
+        term: tuple(sorted(tree_numbers))
+        for term, tree_numbers in term_to_tree_numbers.items()
+        if tree_numbers
+    }
+
+    valid_sampling_terms = list(term_to_tree_numbers.keys())
+    print(f"找到 {len(valid_sampling_terms)} 個可用於取樣的詞。")
+    if len(valid_sampling_terms) < 2:
+        print("沒有足夠的詞來進行取樣。正在結束程式。")
         return
 
     sampled_pairs_data = []
@@ -408,18 +450,9 @@ def main():
     print("開始取樣過程...")
     while len(sampled_pairs_data) < SAMPLING_QUANTITY and attempts < max_attempts:
         attempts += 1
-        
-        # 修改：允許重複取樣節點
-        node1, node2 = random.choices(valid_sampling_nodes, k=2)
 
-        if not node1.terms or not node2.terms:
-            continue
-
-        term_i = random.choice(list(node1.terms))
-        term_j = random.choice(list(node2.terms))
-
-        if term_i == term_j:
-            continue # 術語必須不同
+        # 以詞為單位抽樣，而非節點
+        term_i, term_j = random.sample(valid_sampling_terms, 2)
 
         current_term_pair = frozenset({term_i, term_j})
         if current_term_pair in seen_term_pairs:
@@ -427,21 +460,27 @@ def main():
             
         # 詳細記錄前 20 個成功的樣本
         log_this_sample = len(sampled_pairs_data) < 20
-        
-        similarity = wup_similarity(node1.tree_number, node2.tree_number, log_this_sample)
+
+        similarity, best_pair, pair_count = max_wup_similarity_for_terms(
+            term_i,
+            term_j,
+            term_to_tree_numbers,
+            log_example=log_this_sample,
+        )
         
         if log_this_sample:
             print(f"  - 樣本 #{len(sampled_pairs_data) + 1}:")
-            print(f"    - Node1: '{node1.tree_number}' | Term: '{term_i}'")
-            print(f"    - Node2: '{node2.tree_number}' | Term: '{term_j}'")
+            print(f"    - Word_i: '{term_i}'")
+            print(f"    - Word_j: '{term_j}'")
+            print(f"    - 最大相似度來自節點配對: {best_pair[0]} vs {best_pair[1]} (共 {pair_count} 組)")
 
-        # 將相似度四捨五入到小數點後兩位
-        rounded_similarity = round(similarity, 2)
+        # 將相似度四捨五入到小數點後三位
+        rounded_similarity = round(similarity, 3)
         
         sampled_pairs_data.append({"word_i": term_i, "word_j": term_j, "wup_similarity": rounded_similarity})
         seen_term_pairs.add(current_term_pair)
         
-        if (len(sampled_pairs_data) % 100000 == 0) and not log_this_sample:
+        if (len(sampled_pairs_data) % 50000 == 0) and not log_this_sample:
             print(f"  已產生 {len(sampled_pairs_data)}/{SAMPLING_QUANTITY} 個樣本...")
 
     print("取樣完成。")
