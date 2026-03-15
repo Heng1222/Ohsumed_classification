@@ -68,7 +68,7 @@ self.classifier = nn.Sequential(
 weighted avg       0.42      0.39      0.37       983
 ```
 #### LoRA 
-![訓練過程](img/LoRA_Loss.png)
+![訓練過程](img/LoRA_Loss.png) 
 ```
 訓練時間: 9562.30 秒
 
